@@ -1,0 +1,66 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env/
+.venv/
+pip-wheel-metadata/
+*.egg-info/
+.eggs/
+build/
+dist/
+env/
+
+# Virtualenv / pipenv / poetry
+Pipfile.lock
+poetry.lock
+
+# Testing / tooling
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.nox/
+
+# IDEs / editors
+.vscode/
+.idea/
+*.sublime-*
+*.swp
+
+# Node (if used)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+.pnpm-debug.log
+
+# Logs and runtime files
+logs/
+*.log
+*.out
+*.pid
+
+# Env / secrets
+.env
+.env.*
+secrets.*
+credentials.json
+local_settings.py
+
+# Databases
+*.sqlite3
+*.db
+*.db-journal
+
+# Docker / container
+docker-compose.override.yml
+
+# Misc
+*.bak
