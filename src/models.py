@@ -52,3 +52,28 @@ class Transaction(BaseModel):
             ]
         }
     }
+
+class TransactionResponse(BaseModel):
+    id: int
+    title: str
+    amount: float
+    type: str
+        
+    model_config = {
+        'json_schema_extra': {
+            'examples': [
+                {
+                    'id': 1,
+                    'title': 'Grocery shopping',
+                    'amount': 150.75,
+                    'type': 'expense'
+                },
+                {
+                    'id': 2,
+                    'title': 'Salary',
+                    'amount': 3000.00,
+                    'type': 'income'
+                }
+            ]
+        }
+    }

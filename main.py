@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException, Request, status
-from src.models import Transaction
+from src.models import Transaction, TransactionResponse
 from fastapi.responses import JSONResponse
 
 
@@ -48,12 +48,12 @@ def get_transaction(transaction_id: int):
             status_code=status.HTTP_404_NOT_FOUND, 
             detail='Transaction not found')
     
-@app.post('/transactions', response_model=Transaction, status_code=status.HTTP_201_CREATED, summary='Create Transaction', description='Create a new transaction', tags=['Transactions'])
+@app.post('/transactions', response_model=TransactionResponse, status_code=status.HTTP_201_CREATED, summary='Create Transaction', description='Create a new transaction', tags=['Transactions'])
 def create_transaction(transaction: Transaction):
     transactions.append(transaction)
     return transaction
 
-@app.put("/transactions/{transaction_id}", response_model=Transaction, summary='Update Transaction', description='Update an existing transaction', tags=['Transactions'])
+@app.put("/transactions/{transaction_id}", response_model=TransactionResponse, summary='Update Transaction', description='Update an existing transaction', tags=['Transactions'])
 def update_transaction(transaction_id: int, updated_transaction: Transaction):
     for index, t in enumerate(transactions):
         if t.id == transaction_id:
