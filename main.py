@@ -1,22 +1,37 @@
-from fastapi import FastAPI, HTTPException, status
+from fastapi import FastAPI, HTTPException, Request, status
 from src.models import Transaction
+from fastapi.responses import JSONResponse
 
 
-app = FastAPI()
+app = FastAPI(
+    title='Finance Tracker API',
+    description='A simple API for tracking income and expenses',
+    version='1.0.0'
+)
 
 transactions = []
 
+@app.exception_handler(Exception)
+async def global_exception_handler(request:Request, exc:Exception):
+    return JSONResponse(
+        status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        content={
+            'error': 'Internal Server Error',
+            'detail': 'Something went wrong on our end. Please try again later.'
+        }
+    )
 
-@app.get('/')
+
+@app.get('/', summary='Root', description='Check if the API is running', tags=['General'])
 def root():
     return {'message': 'Finance tracker api is running!'}
 
-@app.get('/health')
+@app.get('/health', summary='Health Check', description='Check the health status of the API', tags=['General'])
 def health_check():
     return {'status': 'healthy', 'version': '1.0.0'}
 
 
-@app.get('/transactions', response_model=list[Transaction])
+@app.get('/transactions', response_model=list[Transaction], summary='Get Transactions', description='Retrieve a list of all transactions', tags=['Transactions'])
 def get_transactions(transaction_type: str = None):
     # Placeholder for fetching transactions from a database
     if transaction_type:
@@ -24,7 +39,7 @@ def get_transactions(transaction_type: str = None):
         return filtered
     return transactions
 
-@app.get('/transactions/{transaction_id}', response_model=Transaction)
+@app.get('/transactions/{transaction_id}', response_model=Transaction, summary='Get Transaction by ID', description='Retrieve a single transaction by its ID', tags=['Transactions'])
 def get_transaction(transaction_id: int):
     for t in transactions:
         if t.id == transaction_id:
@@ -33,12 +48,12 @@ def get_transaction(transaction_id: int):
             status_code=status.HTTP_404_NOT_FOUND, 
             detail='Transaction not found')
     
-@app.post('/transactions', response_model=Transaction, status_code=status.HTTP_201_CREATED)
+@app.post('/transactions', response_model=Transaction, status_code=status.HTTP_201_CREATED, summary='Create Transaction', description='Create a new transaction', tags=['Transactions'])
 def create_transaction(transaction: Transaction):
     transactions.append(transaction)
     return transaction
 
-@app.put("/transactions/{transaction_id}", response_model=Transaction)
+@app.put("/transactions/{transaction_id}", response_model=Transaction, summary='Update Transaction', description='Update an existing transaction', tags=['Transactions'])
 def update_transaction(transaction_id: int, updated_transaction: Transaction):
     for index, t in enumerate(transactions):
         if t.id == transaction_id:
@@ -49,10 +64,11 @@ def update_transaction(transaction_id: int, updated_transaction: Transaction):
         detail=f"Transaction with id {transaction_id} not found"
     )
 
-@app.delete("/transactions/{transaction_id}", status_code=status.HTTP_204_NO_CONTENT)
+@app.delete("/transactions/{transaction_id}", status_code=status.HTTP_204_NO_CONTENT, summary='Delete Transaction', description='Delete a transaction by its ID', tags=['Transactions'])
 def delete_transaction(transaction_id: int):
     for index, t in enumerate(transactions):
         if t.id == transaction_id:
-            del transactions[index]
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
+            transactions.pop(index)
+            return
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
                                 detail=f"Transaction with id {transaction_id} not found")
