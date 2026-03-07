@@ -16,7 +16,7 @@ def health_check():
     return {'status': 'healthy', 'version': '1.0.0'}
 
 
-@app.get('/transactions')
+@app.get('/transactions', response_model=list[Transaction])
 def get_transactions(transaction_type: str = None):
     # Placeholder for fetching transactions from a database
     if transaction_type:
@@ -24,14 +24,14 @@ def get_transactions(transaction_type: str = None):
         return filtered
     return transactions
 
-@app.get('/transactions/{transaction_id}')
+@app.get('/transactions/{transaction_id}', response_model=Transaction)
 def get_transaction(transaction_id: int):
     for t in transactions:
         if t.id == transaction_id:
             return t
         return {'error': 'Transaction not found'}
     
-@app.post('/transactions')
+@app.post('/transactions', response_model=Transaction)
 def create_transaction(transaction: Transaction):
     transactions.append(transaction)
     return transaction
