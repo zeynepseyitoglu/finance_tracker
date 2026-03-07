@@ -1,6 +1,11 @@
 from fastapi import FastAPI
+from src.models import Transaction
+
 
 app = FastAPI()
+
+transactions = []
+
 
 @app.get('/')
 def root():
@@ -14,23 +19,19 @@ def health_check():
 @app.get('/transactions')
 def get_transactions(transaction_type: str = None):
     # Placeholder for fetching transactions from a database
-    transactions = [
-        {'transaction_id': 1, 'amount': 100.0, 'currency': 'USD', 'type': 'income'},
-        {'transaction_id': 2, 'amount': 50.0, 'currency': 'USD', 'type': 'expense'},
-        {'transaction_id': 3, 'amount': 200.0, 'currency': 'USD', 'type': 'income'},
-    ]
-    
     if transaction_type:
-        transactions = [t for t in transactions if t['type'] == transaction_type]
-    
+        filtered = [t for t in transactions if t.type == transaction_type]
+        return filtered
     return transactions
 
 @app.get('/transactions/{transaction_id}')
 def get_transaction(transaction_id: int):
-    # Placeholder for fetching transaction details from a database
-    return {
-        'transaction_id': transaction_id,
-        'amount': 100.0,
-        'currency': 'USD',
-        'description': 'Sample transaction'
-    }
+    for t in transactions:
+        if t.id == transaction_id:
+            return t
+        return {'error': 'Transaction not found'}
+    
+@app.post('/transactions')
+def create_transaction(transaction: Transaction):
+    transactions.append(transaction)
+    return transaction
