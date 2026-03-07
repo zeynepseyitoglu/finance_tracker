@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, status
 from src.models import Transaction
 
 
@@ -29,9 +29,30 @@ def get_transaction(transaction_id: int):
     for t in transactions:
         if t.id == transaction_id:
             return t
-        return {'error': 'Transaction not found'}
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, 
+            detail='Transaction not found')
     
-@app.post('/transactions', response_model=Transaction)
+@app.post('/transactions', response_model=Transaction, status_code=status.HTTP_201_CREATED)
 def create_transaction(transaction: Transaction):
     transactions.append(transaction)
     return transaction
+
+@app.put("/transactions/{transaction_id}", response_model=Transaction)
+def update_transaction(transaction_id: int, updated_transaction: Transaction):
+    for index, t in enumerate(transactions):
+        if t.id == transaction_id:
+            transactions[index] = updated_transaction
+            return updated_transaction
+    raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail=f"Transaction with id {transaction_id} not found"
+    )
+
+@app.delete("/transactions/{transaction_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_transaction(transaction_id: int):
+    for index, t in enumerate(transactions):
+        if t.id == transaction_id:
+            del transactions[index]
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
+                                detail=f"Transaction with id {transaction_id} not found")
