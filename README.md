@@ -4,7 +4,7 @@ A REST API built with FastAPI for tracking personal income and expenses. Support
 
 ---
 
-## 🛠 Tech Stack
+## Tech Stack
 
 - **Python 3.12**
 - **FastAPI** — web framework
@@ -13,7 +13,7 @@ A REST API built with FastAPI for tracking personal income and expenses. Support
 
 ---
 
-## ⚙️ Installation & Setup
+## Installation & Setup
 
 1. **Clone the repository**
    ```bash
@@ -34,7 +34,7 @@ A REST API built with FastAPI for tracking personal income and expenses. Support
 
 ---
 
-## 🚀 How to Run
+## How to Run
 
 ```bash
 uvicorn main:app --reload
@@ -62,7 +62,7 @@ Interactive docs available at `http://127.0.0.1:8000/docs`
 
 ---
 
-## 📋 Example Requests & Responses
+## Example Requests & Responses
 
 ### Create a Transaction
 **POST** `/transactions`
@@ -145,7 +145,7 @@ Response `404 Not Found`:
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 finance_tracker/
