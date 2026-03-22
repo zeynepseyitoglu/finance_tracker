@@ -1,0 +1,2 @@
+[alembic]
+sqlalchemy.url = postgresql://your_user:yourpassword@localhost:5432/your_db

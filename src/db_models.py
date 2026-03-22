@@ -11,3 +11,4 @@ class Transaction(Base):
     type = Column(String, nullable=False)
     description = Column(String, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+    category = Column(String, nullable=True)
