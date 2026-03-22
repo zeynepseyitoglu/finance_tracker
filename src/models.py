@@ -1,29 +1,16 @@
+from datetime import datetime
+
 from pydantic import BaseModel
 from typing import Optional
 
-class Category(BaseModel):
-    name: str
-    color: Optional[str] = None
-
-    model_config = {
-        'json_schema_extra': {
-            'examples': [
-                {
-                    'name': 'Food',
-                    'color': 'blue'
-                }
-            ]
-        }
-    }
 
 class Transaction(BaseModel):
-    id: int
+    
     title: str
     amount: float
     type: str  # 'income' or 'expense'
     description: Optional[str] = None
-    category: Optional[Category] = None
-
+   
     model_config = {
         'json_schema_extra': {
             'examples': [
@@ -58,8 +45,11 @@ class TransactionResponse(BaseModel):
     title: str
     amount: float
     type: str
-        
+    description: Optional[str] = None
+    created_at: datetime
+
     model_config = {
+        'from_attributes': True,
         'json_schema_extra': {
             'examples': [
                 {
