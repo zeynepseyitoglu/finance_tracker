@@ -1,44 +1,13 @@
-from datetime import datetime
-
 from pydantic import BaseModel
 from typing import Optional
+from datetime import datetime
 
-
-class Transaction(BaseModel):
-    
+class TransactionCreate(BaseModel):
     title: str
     amount: float
-    type: str  # 'income' or 'expense'
+    type: str
     description: Optional[str] = None
-   
-    model_config = {
-        'json_schema_extra': {
-            'examples': [
-                {
-                    'id': 1,
-                    'title': 'Grocery shopping',
-                    'amount': 150.75,
-                    'type': 'expense',
-                    'description': 'Bought groceries for the week',
-                    'category': {
-                        'name': 'Food',
-                        'color': 'blue'
-                    }
-                },
-                {
-                    'id': 2,
-                    'title': 'Salary',
-                    'amount': 3000.00,
-                    'type': 'income',
-                    'description': 'Monthly salary',
-                    'category': {
-                        'name': 'Income',
-                        'color': 'green'
-                    }
-                }
-            ]
-        }
-    }
+    category: Optional[str] = None
 
 class TransactionResponse(BaseModel):
     id: int
@@ -46,24 +15,9 @@ class TransactionResponse(BaseModel):
     amount: float
     type: str
     description: Optional[str] = None
+    category: Optional[str] = None
     created_at: datetime
 
     model_config = {
-        'from_attributes': True,
-        'json_schema_extra': {
-            'examples': [
-                {
-                    'id': 1,
-                    'title': 'Grocery shopping',
-                    'amount': 150.75,
-                    'type': 'expense'
-                },
-                {
-                    'id': 2,
-                    'title': 'Salary',
-                    'amount': 3000.00,
-                    'type': 'income'
-                }
-            ]
-        }
+        "from_attributes": True
     }
