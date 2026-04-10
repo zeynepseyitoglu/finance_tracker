@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Request, status
 from fastapi.responses import JSONResponse
 from routers import transactions
+from src.auth.router import router as auth_router
 
 app = FastAPI(
     title='Finance Tracker API',
@@ -30,3 +31,4 @@ def health_check():
 
 
 app.include_router(transactions.router)
+app.include_router(auth_router)
