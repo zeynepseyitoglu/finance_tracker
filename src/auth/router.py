@@ -4,13 +4,14 @@ from src.async_database import get_db
 from src.auth.schemas import UserCreate, UserResponse, LoginRequest
 from src.auth.crud import get_user_by_email, create_user
 from src.auth.hashing import verify_password
+from src.auth.jwt import create_access_token
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 
 @router.post("/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED, summary="Register User", description="Registers a new user with email and password. Returns the created user")
 async def register(user: UserCreate, db: AsyncSession = Depends(get_db)):
-    existing_user = await get_user_by_email(db, user.email)
+    existing_user = await get_user_by_email(db, user.email) #returns None if user doesn't exist
     if existing_user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -32,5 +33,6 @@ async def login(request: LoginRequest, db: AsyncSession = Depends(get_db)):
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid email or password"
         )
-    return {"message": "Login successful"}
+    access_token = create_access_token(data={"email": user.email})
+    return {'access_token': access_token,'token_type': 'bearer'}
 
